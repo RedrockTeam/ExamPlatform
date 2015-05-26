@@ -5,7 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var middlewareManager = require('./middleware');
-
+var passport = require('passport');
+var GitHubStrategy = require('passport-github').Strategy;
+var session = require('express-session');
+var Store = session.Store;
+var MongooseStore = require('mongoose-express-session')(Store);
+var mongoose = require('./models').monogoose;
 var app = express();
 
 // view engine setup
@@ -19,6 +24,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+    secret : "hGS5CX3V",
+    resave : false,
+    rolling : false,
+    cookie: { maxAge: 60000},
+    saveUninitialized : true,
+    store: new MongooseStore({
+        /* configuration */
+        connection : mongoose
+    })
+}));
+
+passport.use(new GitHubStrategy({
+    clientID : config.oauth_client_id,
+    clientSecret : config.oauth_client_secret,
+    scope : ['user']
+}, function(accessToken, refreshToken, profile, done){
+    profile.accessToken = accessToken;
+    process.nextTick(function(){
+        return done(null, profile);
+    });
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 middlewareManager(app);
 
