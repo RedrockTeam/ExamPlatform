@@ -12,6 +12,10 @@ var config = {
     db: 'mongodb://andycall:dong1234@127.0.0.1/redrock',
     db_name: 'redrock',
 
+    // oauth config
+    oauth_client_id : "ebdc4ffe9b73c17f0f75",
+    oauth_client_secret : "1f94f3ee14eb7c3f9bd736eaf0b87103ca052d7c",
+
     // 程序运行的端口
     port: 3000
 

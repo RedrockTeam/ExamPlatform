@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var config = require('./config');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -22,7 +23,6 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret : "hGS5CX3V",
@@ -39,7 +39,7 @@ app.use(session({
 passport.use(new GitHubStrategy({
     clientID : config.oauth_client_id,
     clientSecret : config.oauth_client_secret,
-    scope : ['user']
+    scope : ['user', 'read:org']
 }, function(accessToken, refreshToken, profile, done){
     profile.accessToken = accessToken;
     process.nextTick(function(){
