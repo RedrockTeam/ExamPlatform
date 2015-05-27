@@ -34,9 +34,6 @@ router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express', user : req.user });
 });
 
-router.get('/hello', function(req, res, next){
-    res.render('hello', { user : req.user});
-});
 
 router.get('/loginin', function(req, res){
     res.render('login');
@@ -46,7 +43,6 @@ router.get('/loginout', function(req, res){
     req.logout();
     res.redirect('/loginin');
 });
-
 
 
 router.post('/autoSave', function(){

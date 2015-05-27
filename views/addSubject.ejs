@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加题目</title>
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h2>添加题目</h2>
+        </div>
+
+        <h4>已添加的题目</h4>
+        <div class="sub_list" id='titles'>
+
+        </div>
+
+        <h4>添加试题</h4>
+        <form id="form">
+            <div class="form-group">
+                <label for="title">标题</label>
+                <input type="hidden" name="test_id" value="<%= test_id %>"/>
+                <input type="text" name="title" id="title" />
+            </div>
+            <div class="form-group">
+                <input type="submit" name="submit" class="btn btn-primary" />
+            </div>
+        </form>
+
+    </div>
+</body>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script>
+    $.fn.serializeObject = function () {
+        "use strict";
+
+        var result = {};
+        var extend = function (i, element) {
+            var node = result[element.name];
+
+            // If node with same name exists already, need to convert it to an array as it
+            // is a multi-value field (i.e., checkboxes)
+
+            if ('undefined' !== typeof node && node !== null) {
+                if ($.isArray(node)) {
+                    node.push(element.value);
+                } else {
+                    result[element.name] = [node, element.value];
+                }
+            } else {
+                result[element.name] = element.value;
+            }
+        };
+
+        $.each(this.serializeArray(), extend);
+        return result;
+    };
+    $("#form").on('submit', function(e){
+        var title = $("#title").val();
+
+        var form = e.target;
+        var data = $(form).serializeObject();
+
+        $.post('/backend/addSubject', data,  function(data){
+            if(parseInt(data.status) === 200){
+                var title = data.title;
+                $("#titles").append("<p>" + title + "</p>");
+            }
+        });
+        return false;
+    });
+
+
+</script>
+
+</html>

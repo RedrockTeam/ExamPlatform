@@ -7,6 +7,7 @@ var Schema = mongodb.Schema;
 var UserShema = new Schema({
     provider : String,
     accessToken : String,
+    isAdmin : Boolean,
     id : {
         type: Number,
         unique: true

@@ -4,9 +4,21 @@
     <meta charset="UTF-8">
     <title>Document</title>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <style>
+        .container{
+            max-width: 330px;
+            max-height: 100px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
-<h1>Login</h1>
-<a href="/oauth">使用Github登陆</a>
-</body>
+<div class="container">
+        <a href="/oauth"><button class="btn btn-primary btn-block">用Github登陆</button></a>
+</div></body>
 </html>
