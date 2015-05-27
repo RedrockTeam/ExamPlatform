@@ -39,7 +39,7 @@ app.use(session({
 passport.use(new GitHubStrategy({
     clientID : config.oauth_client_id,
     clientSecret : config.oauth_client_secret,
-    scope : ['user', 'read:org']
+    scope : ['user']
 }, function(accessToken, refreshToken, profile, done){
     profile.accessToken = accessToken;
     process.nextTick(function(){

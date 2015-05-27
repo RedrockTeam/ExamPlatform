@@ -9,7 +9,7 @@ var config = {
     //debug: true,
 
     // mongodb 配置
-    db: 'mongodb://andycall:dong1234@127.0.0.1/redrock',
+    db: 'mongodb://andycall:dong1234@127.0.0.1/homework',
     db_name: 'redrock',
 
     // oauth config
