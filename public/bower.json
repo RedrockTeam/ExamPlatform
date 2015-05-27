@@ -1,0 +1,21 @@
+{
+  "name": "Homework",
+  "version": "0.1.0",
+  "homepage": "https://github.com/RedrockTeam/ExamPlatform",
+  "authors": [
+    "andycall <dongtiangche@gmail.com>"
+  ],
+  "description": "homework",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "bootstrap": "~3.3.4"
+  }
+}
