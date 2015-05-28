@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>添加题目</title>
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/bower_components/bootstrap-datepicker-1.4.0/css/bootstrap-datepicker3.min.css"/>
 </head>
 <body>
     <div class="container">
@@ -11,11 +12,21 @@
             <h2>添加题目</h2>
         </div>
 
+        <!--<h4>开始日期</h4>-->
+        <!--<div class="clearfix">-->
+            <!--<div id="sandbox-container" style="padding-left: 0;" class="col-lg-3">-->
+                <!--<div class="input-group date">-->
+                    <!--<input type="text" class="form-control" id="month">-->
+                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
         <h4>已添加的题目</h4>
         <div class="sub_list" >
             <div class="clearfix" id='titles'>
                 <% subject.forEach(function(value){ %>
-                    <p><%= value.title %> <a class='deleteTitle'  href="javascript:void()" data-id="<%= value.id %>">删除</a></p>
+                    <p><%= value.title %> <a class='deleteTitle'  href="javascript:void()" data-title="<%= examTitle %>" data-id="<%= value.id %>">删除</a></p>
                 <% }); %>
             </div>
         </div>
@@ -26,15 +37,23 @@
                 <label for="title">标题</label>
                 <input type="text" name="title" id="title" class="form-control" />
             </div>
+            <input type="hidden" name="examTitle" value="<%= examTitle %>"/>
             <div class="form-group">
                 <input type="submit" name="submit" class="btn btn-primary" />
+                <br/>
+                <br/>
+                <br/>
+                <a href="/backend" class="btn btn-primary">结束</a>
             </div>
         </form>
 
     </div>
 </body>
 <script src="/bower_components/jquery/dist/jquery.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/bower_components/bootstrap-datepicker-1.4.0/js/bootstrap-datepicker.js"></script>
 <script>
+    var examTitle = "<%= examTitle %>";
     $.fn.serializeObject = function () {
         "use strict";
 
@@ -69,7 +88,8 @@
             if(parseInt(data.status) === 200){
                 var title = data.title;
                 var id = data.id;
-                $("#titles").append("<p>" + title+ "<a class='deleteTitle'  href='javascript:void' data-id='"+ id + "'>删除</a>"  + "</p>" );
+                $("#titles").append("<p>" + title+ "<a class='deleteTitle' data-title='" + examTitle + "'  href='javascript:void'  data-id='"+ id + "'>删除</a>"  + "</p>" );
+                $("#title").val("");
             } else{
                 alert("ERROR" + JSON.stringify(data.error));
             }
@@ -78,18 +98,28 @@
     });
 
 
-
     $('#titles').on('click', '.deleteTitle',  function(e){
         var id = e.target.dataset.id;
-        $.post('/backend/deleteSubject', { id : id}, function(data){
+        var title = e.target.dataset.title;
+        var target = e.target;
+        debugger;
+        $.post('/backend/deleteSubject', { id : id, examTitle : title}, function(data){
             if(parseInt(data.statusCode) === 200){
-                $('a[data-id="' + id + '"]').parent().remove();
+                $(target).parent().remove();
             } else {
                 alert("ERROR" + JSON.stringify(data.error));
             }
         });
     });
 
+
+    $('#sandbox-container .input-group.date').datepicker({
+        language: "zh-CN",
+        autoclose: true,
+        todayHighlight: true,
+        toggleActive: true,
+        todayBtn : true
+    });
 </script>
 
 </html>

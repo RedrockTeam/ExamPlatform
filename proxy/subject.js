@@ -5,7 +5,7 @@ var Subject = require('../models').Subject;
 var _ = require('lodash');
 
 
-exports.getTitleById = function(id, callback){
+exports.getSubjectsById = function(id, callback){
     Subject.find({ id : id}, callback);
 };
 

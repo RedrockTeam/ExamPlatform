@@ -4,12 +4,12 @@
 
 var mongodb = require('mongoose');
 var Schema = mongodb.Schema;
-var SubjectShema = new Schema({
+var ResultShema = new Schema({
     title : String,
     result : String,
     id : Number,
-    username : String
+    displayName : String
 });
 
 
-mongodb.model('Subject', SubjectShema);
+mongodb.model('Result', ResultShema);

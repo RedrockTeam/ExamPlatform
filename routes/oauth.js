@@ -13,7 +13,13 @@ var relativePath = "/oauth";
 /* GET home page. */
 router.get('/', passport.authenticate('github'));
 router.get('/callback', passport.authenticate('github', { failureRedirect : "/oauth"}), function(req, res, next){
-    res.redirect('/');
+    var isAdmin = req.user.isAdmin;
+    if(isAdmin){
+        res.redirect('/backend');
+    } else {
+        res.redirect('/');
+    }
+
 });
 
 

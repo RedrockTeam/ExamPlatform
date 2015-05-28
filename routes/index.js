@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 var _ = require('lodash');
+var User = require('../proxy/user');
+var Subject = require('../proxy/subject');
+
 
 
 // config this router relative path
@@ -10,7 +13,9 @@ var relativePath = "/";
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express', user : req.user });
+
 });
+
 
 
 router.get('/loginin', function(req, res){
