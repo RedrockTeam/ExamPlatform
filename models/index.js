@@ -14,8 +14,10 @@ mongoose.connect(config.db, function(err) {
 });
 
 
-require('./user');
+require('./User');
+require('./Subject');
 
 exports.User = mongoose.model('User');
+exports.Subject = mongoose.model('Subject');
 exports.monogoose = mongoose;
 

@@ -12,16 +12,19 @@
         </div>
 
         <h4>已添加的题目</h4>
-        <div class="sub_list" id='titles'>
-
+        <div class="sub_list" >
+            <div class="clearfix" id='titles'>
+                <% subject.forEach(function(value){ %>
+                    <p><%= value.title %> <a class='deleteTitle'  href="javascript:void()" data-id="<%= value.id %>">删除</a></p>
+                <% }); %>
+            </div>
         </div>
 
         <h4>添加试题</h4>
-        <form id="form">
+        <form id="form" class="col-md-6" style="padding-left: 0">
             <div class="form-group">
                 <label for="title">标题</label>
-                <input type="hidden" name="test_id" value="<%= test_id %>"/>
-                <input type="text" name="title" id="title" />
+                <input type="text" name="title" id="title" class="form-control" />
             </div>
             <div class="form-group">
                 <input type="submit" name="submit" class="btn btn-primary" />
@@ -30,7 +33,7 @@
 
     </div>
 </body>
-<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
 <script>
     $.fn.serializeObject = function () {
         "use strict";
@@ -65,12 +68,27 @@
         $.post('/backend/addSubject', data,  function(data){
             if(parseInt(data.status) === 200){
                 var title = data.title;
-                $("#titles").append("<p>" + title + "</p>");
+                var id = data.id;
+                $("#titles").append("<p>" + title+ "<a class='deleteTitle'  href='javascript:void' data-id='"+ id + "'>删除</a>"  + "</p>" );
+            } else{
+                alert("ERROR" + JSON.stringify(data.error));
             }
         });
         return false;
     });
 
+
+
+    $('#titles').on('click', '.deleteTitle',  function(e){
+        var id = e.target.dataset.id;
+        $.post('/backend/deleteSubject', { id : id}, function(data){
+            if(parseInt(data.statusCode) === 200){
+                $('a[data-id="' + id + '"]').parent().remove();
+            } else {
+                alert("ERROR" + JSON.stringify(data.error));
+            }
+        });
+    });
 
 </script>
 

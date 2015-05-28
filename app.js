@@ -28,7 +28,7 @@ app.use(session({
     secret : "hGS5CX3V",
     resave : false,
     rolling : false,
-    cookie: { maxAge: 60000},
+    cookie: { maxAge: 1000 * 60 * 60} ,
     saveUninitialized : true,
     store: new MongooseStore({
         /* configuration */
