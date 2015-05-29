@@ -5,9 +5,13 @@
 var mongodb = require('mongoose');
 var Schema = mongodb.Schema;
 var ResultShema = new Schema({
-    title : String,
-    result : String,
-    id : Number,
+    ExamTitle : String,
+    result : [
+        new Schema({
+            subjectId : String,
+            result : String
+        }, {_id : false})
+    ],
     displayName : String
 });
 

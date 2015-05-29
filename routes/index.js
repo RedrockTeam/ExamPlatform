@@ -10,7 +10,7 @@ var eventproxy = require('eventproxy');
 
 // config this router relative path
 var relativePath = "/";
-
+var subjectIdArr;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -23,17 +23,12 @@ router.get('/', function(req, res, next) {
             return res.json(err);
         }
 
-        var subjectIdArr = exam.subjectId;
-        //var e = new eventproxy();
-        //
-        //_.each(subjectIdArr, function(subjectid){
-        //    Subject.getSubjectsById(subjectid, e.done('getSubject'));
-        //});
-        //e.after('getSubject', subjectIdArr.length, function(subjects){
-        //
-        //    res.render('index', { title: 'Redrock考试平台', user : req.user });
-        //});
-        var firstId = subjectIdArr.pop();
+        if(! exam){
+            return res.end("暂未开始！");
+        }
+
+        subjectIdArr = exam.subjectId;
+        var firstId = subjectIdArr.slice(0, 1);
 
         res.redirect('/subject?subid=' + firstId + "&examTitle=" + exam.title);
     });
@@ -43,7 +38,12 @@ router.get('/subject', function(req, res){
     var subjectId = req.query.subid;
     var examTitle = req.query.examTitle;
 
-    Subject.getSubjectsById(subjectId, function(err, subject){
+    examTitle = examTitle.substring(0, 40);
+    if(! /\d{1,4}/.test(subjectId) || ! examTitle || examTitle.length > 40){
+        res.status(404).end("哦， 你来搞我服务器了嘛。 你完了→_→");
+    }
+
+    Subject.getSubjectsByIndex(subjectId, function(err, subject){
         if(err){
             console.log(err);
             return res.json(err);
@@ -54,10 +54,42 @@ router.get('/subject', function(req, res){
                 console.error(err);
                 return res.json(err);
             }
-            console.log(subject);
+            console.log('subject', subject);
 
-            res.render('index', { title: 'Redrock考试平台', user : req.user, subjectId : subjectId, subject : subject, subjectIdArr : exam.subjectId });
+            res.render('index', {
+                title: 'Redrock考试平台',
+                user : req.user,
+                subjectId : subjectId,
+                examTitle : examTitle,
+                subject : subject,
+                subjectIdArr : exam.subjectId
+            });
         });
+    });
+});
+
+router.post("/subject", function(req, res){
+    var subjectId = req.body.page;
+    var result = req.body.result;
+    var displayName = req.user.displayName;
+    var isAdmin = req.user.isAdmin;
+    var examTitle = req.body.examTitle;
+
+
+
+    if(isAdmin){
+        return res.redirect('back').end("<script>alert('管理员不要乱动学员的东西→_→')</script>");
+    }
+
+    Result.updateResultByName(displayName, {
+        subjectId : subjectId,
+        result : result
+    }, function(err, newResult){
+        if(err){
+            return res.json('更新错误！');
+        }
+
+        res.redirect('/subject?examTitle=' + examTitle + "&subid=" + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1]);
     });
 });
 

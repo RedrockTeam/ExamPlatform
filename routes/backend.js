@@ -76,12 +76,14 @@ router.get('/addSubject', function(req, res){
 
         Subject.getSubjectsById(exam.authorId, function(err, subjects){
             if(err){
+                console.log(err);
                 res.status(404).json({
                     error : JSON.stringify(err)
                 });
             }
+            //console.log(subjects);
             res.render('addSubject', {
-                subject : subjects,
+                subject : subjects || [],
                 examTitle: examTitle
             });
 
