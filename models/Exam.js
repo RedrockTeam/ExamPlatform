@@ -6,7 +6,7 @@ var mongodb = require('mongoose');
 var Schema = mongodb.Schema;
 
 var ExamShema = new Schema({
-    authorId : Number,
+    authorId : String,
     studentId : Array,
     subjectId : Array,
     startTime : Date,

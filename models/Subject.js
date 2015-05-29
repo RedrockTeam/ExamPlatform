@@ -9,7 +9,7 @@ var SubjectShema = new Schema({
     index: { type: Schema.Types.ObjectId, ref: 'Index' },
     title : String,
     result : String,
-    id : Number,
+    id : String,
     username : String
 });
 

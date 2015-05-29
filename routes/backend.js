@@ -9,6 +9,7 @@ var Exam = require('../proxy/exam');
 // config this router relative path
 var relativePath = "/backend";
 var error = require('../error');
+var crypto = require('crypto');
 
 /* GET home page. */
 
@@ -30,10 +31,11 @@ router.get('/createExam', function(req, res){
 
 router.post('/createExam', function(req, res){
     var examTitle = req.body.title;
-    var authorId = req.user.id;
+    var authorId = crypto.createHash('sha1').update(Math.random().toString()).digest('hex');
 
     Exam.createExam(examTitle, authorId, function(err){
         if(err){
+            console.log(err);
             return res.json({error : "测试创建失败"});
         }
 
@@ -52,7 +54,8 @@ router.get('/addSubject', function(req, res){
 
     Exam.getExamByTitle(examTitle, function(err, exam){
         if(err){
-            res.status(400).end("获取测试信息错误！");
+            console.log(err);
+            return res.status(400).end("获取测试信息错误！");
         }
 
         Subject.getSubjectsById(exam.authorId, function(err, subjects){
