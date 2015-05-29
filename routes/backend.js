@@ -44,6 +44,22 @@ router.post('/createExam', function(req, res){
 
 });
 
+router.get('/activeExam', function(req, res){
+    var examTitle = req.query.examTitle;
+
+    Exam.activeExamByTitle(examTitle, function(err, exam){
+        if(err){
+            console.log(err);
+            return res.json(err);
+        }
+
+        res.json({
+            statusCode : 200
+        });
+    });
+});
+
+
 router.get('/addSubject', function(req, res){
     var userId = req.user.id;
     var examTitle = req.query.examTitle;

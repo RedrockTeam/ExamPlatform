@@ -19,7 +19,7 @@
             <h2>考核列表</h2>
 
             <% exams.forEach(function(exam){ %>
-                <p><a href="/backend/addSubject?examTitle=<%= exam.title %>"><%= exam.title %></a> <a class="btn btn-success" href="/backend/activeExam?examTitle="<%= exam.title %>>设为目前考核</a></p>
+                <p><a href="/backend/addSubject?examTitle=<%= exam.title %>"><%= exam.title %></a> <a <% if(exam.isRunning){ %>class="btn btn-primary activeBtn" <% } else {%> class="btn btn-success activeBtn" <% } %> data-href="/backend/activeExam?examTitle=<%= exam.title %>"> <% if(! exam.isRunning){ %> 设为目前考核 <% } else { %> 已激活 <% } %> </a></p>
             <% });%>
         </div>
 
@@ -47,4 +47,29 @@
         </div>
     </div>
 </body>
+<script src="/bower_components/jquery/dist/jquery.js"></script>
+<script>
+    $(".activeBtn").on('click', function(e){
+        var target = e.target;
+        var src =  target.dataset.href;
+        $.get(src, function(data){
+            if(data.statusCode === 200){
+                $('.activeBtn').html("设为目前考核");
+                $('.activeBtn').removeClass('btn-primary');
+                $('.activeBtn').addClass('btn-success');
+
+                $(target).removeClass('btn-success');
+                $(target).addClass('btn-primary');
+                $(target).html("已激活");
+            } else{
+                alert("ERROR" + JSON.stringify(data));
+            }
+        });
+
+        return false;
+    });
+
+
+
+</script>
 </html>
