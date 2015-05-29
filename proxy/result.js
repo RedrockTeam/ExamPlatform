@@ -48,6 +48,11 @@ exports.updateResultByName = function(name, newR, callback){
         _.each(oldResultArr, function(old, index){
             if(old.subjectId == newR.subjectId){
                 oldResultArr[index].result = newR.result;
+            }else {
+                oldResultArr.push({
+                    subjectId : newR.subjectId,
+                    result : newR.result
+                });
             }
         });
 

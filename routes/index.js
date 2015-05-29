@@ -55,10 +55,8 @@ router.get('/subject', function(req, res){
                 console.error(err);
                 return res.json(err);
             }
-            console.log('subject', subject);
 
             Result.getResultBySubjectId(displayName, subjectId, function(err, resultContent){
-
                 res.render('index', {
                     title: 'Redrock考试平台',
                     user : req.user,
@@ -74,7 +72,7 @@ router.get('/subject', function(req, res){
 });
 
 router.post("/subject", function(req, res){
-    var subjectId = req.body.page;
+    var subjectId = parseInt(req.body.page);
     var result = req.body.result;
     var displayName = req.user.displayName;
     var isAdmin = req.user.isAdmin;
@@ -84,24 +82,75 @@ router.post("/subject", function(req, res){
     //if(isAdmin){
     //    return res.end("<script>alert('管理员不要乱动学员的东西→_→')</script>");
     //}
-
-    Result.saveResult({
-        ExamTitle : examTitle,
-        displayName : displayName,
-        result : [
-            {
-                subjectId : subjectId,
-                result : result
-            }
-        ]
-    }, function(err, result){
+    Exam.getActiveExam(function(err, exam){
         if(err){
-            res.end('错误!');
+            console.log(err);
+            return res.json(err);
         }
-        console.log("subjectArray", subjectIdArr);
 
-        res.redirect('/subject?subid=' + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1] + '&examTitle=' + examTitle);
+        if(! exam){
+            return res.end("暂未开始！");
+        }
+
+        subjectIdArr = exam.subjectId;
+
+        var next = _.indexOf(subjectIdArr, subjectId) + 1;
+        if(!next){
+            res.set("Content-Type", 'text/html');
+            return res.end("都做完了！");
+        }
+
+        Result.getResultByName(displayName, function(err, oldResult){
+            if(err){
+                res.json({error : err});
+            }
+
+            if(! oldResult){
+
+                Result.saveResult({
+                    ExamTitle : examTitle,
+                    displayName : displayName,
+                    result : [
+                        {
+                            subjectId : subjectId,
+                            result : result
+                        }
+                    ]
+                }, function(err, result){
+                    if(err){
+                        res.end('错误!');
+                    }
+
+                    var lastId = _.last(subjectIdArr);
+
+                    if(lastId === subjectId){
+                        res.set("Content-Type", 'text/html');
+                        res.end('都结束了, 点击返回键继续回去修改');
+                    } else {
+                        res.redirect('/subject?subid=' + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1] + '&examTitle=' + examTitle);
+                    }
+                });
+            } else {
+                Result.updateResultByName(displayName, {
+                    subjectId : subjectId,
+                    result : result
+                }, function(err, newRes){
+
+                    var lastId = _.last(subjectIdArr);
+
+                    if(lastId === subjectId){
+                        res.set("Content-Type", 'text/html');
+                        res.end('都结束了, 点击返回键继续回去修改');
+                    }else{
+                        res.redirect('/subject?subid=' + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1] + '&examTitle=' + examTitle);
+                    }
+                });
+            }
+        });
+
     });
+
+
 
     //Result.updateResultByName(displayName, {
     //    subjectId : subjectId,
