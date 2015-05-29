@@ -78,3 +78,7 @@ exports.activeExamByTitle = function(title, callback){
 exports.getExamList = function(callback){
     Exam.find({}, callback);
 };
+
+exports.getActiveExam = function(callback){
+    Exam.findOne({isRunning : true}, callback);
+}
