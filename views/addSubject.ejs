@@ -102,8 +102,9 @@
         var id = e.target.dataset.id;
         var title = e.target.dataset.title;
         var target = e.target;
-        debugger;
+
         $.post('/backend/deleteSubject', { id : id, examTitle : title}, function(data){
+            data = JSON.parse(data);
             if(parseInt(data.statusCode) === 200){
                 $(target).parent().remove();
             } else {

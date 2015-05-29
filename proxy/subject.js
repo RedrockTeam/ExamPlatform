@@ -22,5 +22,5 @@ exports.saveSubject = function(data, callback){
 };
 
 exports.deleteSubjectById = function(id, callback){
-    Subject.find({ id : id}).remove(callback);
+    Subject.find({ _id : id}).remove(callback);
 };

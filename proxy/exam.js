@@ -29,13 +29,17 @@ exports.deleteSubjectId = function(title, id, callback){
     Exam.findOne({
         title : title
     }, function(err, exam){
+        console.log(exam);
         _.each(exam.subjectId, function(sid, index){
-            if(sid === id){
+            if(sid == id){
                 exam.subjectId.splice(index, 1);
+                console.log(exam);
                 exam.save(callback);
             }
         });
 
         return callback(null);
     });
+
+    //Exam.collection.pull({ title : title } , {$pull : {'subjectId' :{ number : sid } }}, callback);
 };

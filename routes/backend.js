@@ -112,18 +112,16 @@ router.post('/deleteSubject', function(req, res){
 
     Exam.deleteSubjectId(examTitle, id, function(err, exam){
         if(err){
-            return res.json({error : "删除失败!"});
+            console.log(err);
+            //return res.json({error : "删除失败!"});
         }
 
         Subject.deleteSubjectById(id, function(err){
             if(err){
-                res.json({
-                    error : error
-                });
+                console.log(err);
             }
-            res.json({
-                statusCode : 200
-            });
+
+            res.status(200).end(JSON.stringify({statusCode : 200}));
         });
     });
 });

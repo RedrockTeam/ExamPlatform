@@ -16,13 +16,19 @@ function adminAuth(req, res, next){
         var routerStack = router.router.stack;
 
         routerStack.forEach(function(value){
-            adminPath.push(Path.join('/backend', value.route.path));
+            if(value.route.path === '/'){
+                adminPath.push('/backend');
+            } else {
+                adminPath.push(Path.join('/backend', value.route.path));
+            }
         });
 
-        if(_.indexOf(adminPath, path) ===  -1){
-           return res.redirect('/backend/');
-        } else{
-           return res.redirect("/");
+        if(_.indexOf(adminPath, path) > -1 && isAdmin) {
+            next();
+        } else if(path === '/'){
+            next();
+        } else {
+            res.redirect('back');
         }
     }
     next();
