@@ -23,12 +23,10 @@ function adminAuth(req, res, next){
             }
         });
 
-        if(_.indexOf(adminPath, path) > -1 && isAdmin) {
-            next();
-        } else if(path === '/'){
-            next();
-        } else {
-            res.redirect('back');
+        if(_.indexOf(adminPath, path) > -1) {
+            if(!isAdmin){
+                return res.status(404).end('Page not found');
+            }
         }
     }
     next();

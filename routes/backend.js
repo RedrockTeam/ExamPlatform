@@ -13,6 +13,7 @@ var crypto = require('crypto');
 
 /* GET home page. */
 
+
 router.get('/', function(req, res){
     Exam.getExamList(function(err, exams){
         if(err){
