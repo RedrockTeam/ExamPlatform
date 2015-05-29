@@ -76,21 +76,33 @@ router.post("/subject", function(req, res){
     var examTitle = req.body.examTitle;
 
 
+    //if(isAdmin){
+    //    return res.end("<script>alert('管理员不要乱动学员的东西→_→')</script>");
+    //}
 
-    if(isAdmin){
-        return res.redirect('back').end("<script>alert('管理员不要乱动学员的东西→_→')</script>");
-    }
-
-    Result.updateResultByName(displayName, {
-        subjectId : subjectId,
-        result : result
-    }, function(err, newResult){
-        if(err){
-            return res.json('更新错误！');
-        }
-
+    Result.saveResult({
+        ExamTitle : examTitle,
+        displayName : displayName,
+        result : [
+            {
+                subjectId : subjectId,
+                result : result
+            }
+        ]
+    }, function(err, result){
         res.redirect('/subject?examTitle=' + examTitle + "&subid=" + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1]);
     });
+
+    //Result.updateResultByName(displayName, {
+    //    subjectId : subjectId,
+    //    result : result
+    //}, function(err, newResult){
+    //    if(err){
+    //        return res.json('更新错误！');
+    //    }
+    //
+    //
+    //});
 });
 
 router.get('/loginin', function(req, res){
