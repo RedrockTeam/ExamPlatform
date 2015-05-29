@@ -150,18 +150,6 @@ router.post("/subject", function(req, res){
 
     });
 
-
-
-    //Result.updateResultByName(displayName, {
-    //    subjectId : subjectId,
-    //    result : result
-    //}, function(err, newResult){
-    //    if(err){
-    //        return res.json('更新错误！');
-    //    }
-    //
-    //
-    //});
 });
 
 router.get('/loginin', function(req, res){

@@ -27,11 +27,17 @@
                 </div>
 
                 <form action="/subject" method="POST" id="form">
+                    <% if(subjectId > subjectIdArr[0]){ %>
                     <a href="/subject?subid=<%= subjectId - 1 %>&examTitle=<%= examTitle %>" class="btn btn-default">上一题</a>
+                    <% }%>
                     <input type="hidden" value="<%= subjectId %>" name="page" />
                     <input type="hidden" value="<%= examTitle %>" name="examTitle" />
                     <input type="hidden" id="result" value="" name="result" />
+                    <% if(subjectId < subjectIdArr[subjectIdArr.length - 1]){ %>
                     <input type="submit" class="btn btn-default" value="下一题"/>
+                    <% } else { %>
+                    <input type="submit" class="btn btn-default" value="答题结束"/>
+                    <% }%>
                 </form>
 
             </div>
