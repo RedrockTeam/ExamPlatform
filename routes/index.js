@@ -37,10 +37,11 @@ router.get('/', function(req, res, next) {
 router.get('/subject', function(req, res){
     var subjectId = req.query.subid;
     var examTitle = req.query.examTitle;
+    var displayName = req.user.displayName;
 
     examTitle = examTitle.substring(0, 40);
     if(! /\d{1,4}/.test(subjectId) || ! examTitle || examTitle.length > 40){
-        res.status(404).end("哦， 你来搞我服务器了嘛。 你完了→_→");
+        return res.status(404).end("哦， 你来搞我服务器了嘛。 你完了→_→");
     }
 
     Subject.getSubjectsByIndex(subjectId, function(err, subject){
@@ -56,13 +57,17 @@ router.get('/subject', function(req, res){
             }
             console.log('subject', subject);
 
-            res.render('index', {
-                title: 'Redrock考试平台',
-                user : req.user,
-                subjectId : subjectId,
-                examTitle : examTitle,
-                subject : subject,
-                subjectIdArr : exam.subjectId
+            Result.getResultBySubjectId(displayName, subjectId, function(err, resultContent){
+
+                res.render('index', {
+                    title: 'Redrock考试平台',
+                    user : req.user,
+                    subjectId : subjectId,
+                    examTitle : examTitle,
+                    subject : subject,
+                    subjectIdArr : exam.subjectId,
+                    resultContent: resultContent
+                });
             });
         });
     });
@@ -90,7 +95,12 @@ router.post("/subject", function(req, res){
             }
         ]
     }, function(err, result){
-        res.redirect('/subject?examTitle=' + examTitle + "&subid=" + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1]);
+        if(err){
+            res.end('错误!');
+        }
+        console.log("subjectArray", subjectIdArr);
+
+        res.redirect('/subject?subid=' + subjectIdArr[_.indexOf(subjectIdArr, subjectId) + 1] + '&examTitle=' + examTitle);
     });
 
     //Result.updateResultByName(displayName, {
@@ -116,10 +126,6 @@ router.get('/loginout', function(req, res){
 
 
 router.post('/autoSave', function(){
-
-});
-
-router.post('/getSave', function(){
 
 });
 

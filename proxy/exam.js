@@ -30,15 +30,15 @@ exports.deleteSubjectId = function(title, id, callback){
         title : title
     }, function(err, exam){
         console.log(exam);
+
         _.each(exam.subjectId, function(sid, index){
             if(sid == id){
                 exam.subjectId.splice(index, 1);
-                console.log(exam);
-                exam.save(callback);
+
             }
         });
 
-        return callback(null);
+        exam.save(callback);
     });
 
     //Exam.collection.pull({ title : title } , {$pull : {'subjectId' :{ number : sid } }}, callback);

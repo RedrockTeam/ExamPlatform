@@ -13,6 +13,29 @@ exports.saveResult = function(data, callback){
     result.save(callback);
 };
 
+exports.getResultBySubjectId = function(displayName, subjectId, callback){
+    Result.findOne({'displayName' : displayName}, function(err, re){
+        if(err){
+            console.log(err);
+        }
+
+        if(! re) {
+            return callback(null, null);
+        }
+
+
+        var resultArr = re.result;
+        var target;
+        _.each(resultArr, function(resultElement){
+            if(resultElement.subjectId === subjectId){
+                target = resultElement.result;
+            }
+        });
+
+        callback(null,target);
+    });
+};
+
 
 exports.getResultByName = function(name, callback){
     Result.findOne({displayName : name}, callback);

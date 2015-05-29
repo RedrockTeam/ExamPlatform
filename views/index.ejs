@@ -27,7 +27,7 @@
                 </div>
 
                 <form action="/subject" method="POST" id="form">
-                    <a href="/subject?subid=<%= subjectId - 1 %>" class="btn btn-default">上一题</a>
+                    <a href="/subject?subid=<%= subjectId - 1 %>&examTitle=<%= examTitle %>" class="btn btn-default">上一题</a>
                     <input type="hidden" value="<%= subjectId %>" name="page" />
                     <input type="hidden" value="<%= examTitle %>" name="examTitle" />
                     <input type="hidden" id="result" value="" name="result" />
@@ -54,6 +54,8 @@
         enableSnippets: true,
         enableLiveAutocompletion: false
     });
+
+    editor.getSession().setValue("<%= resultContent %>");
 
     var id = location.href.split("?")[1].split("=")[1];
 
