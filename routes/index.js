@@ -50,6 +50,10 @@ router.get('/subject', function(req, res){
             return res.json(err);
         }
 
+        if(! subject){
+            return res.status(404).end('subjectId not found');
+        }
+
         Exam.getExamByTitle(examTitle, function(err, exam){
             if(err){
                 console.error(err);
