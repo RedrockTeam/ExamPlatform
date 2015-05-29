@@ -13,7 +13,15 @@ var error = require('../error');
 /* GET home page. */
 
 router.get('/', function(req, res){
-    res.render('background');
+    Exam.getExamList(function(err, exams){
+        if(err){
+            console.log(err);
+            res.status(404).end(JSON.stringify(err));
+        }
+        res.render('background', {
+            exams : exams
+        });
+    });
 });
 
 router.get('/createExam', function(req, res){
@@ -23,7 +31,6 @@ router.get('/createExam', function(req, res){
 router.post('/createExam', function(req, res){
     var examTitle = req.body.title;
     var authorId = req.user.id;
-
 
     Exam.createExam(examTitle, authorId, function(err){
         if(err){

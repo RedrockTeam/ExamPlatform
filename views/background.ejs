@@ -13,8 +13,14 @@
         </div>
 
         <div class="row">
-            <h2>正在进行中的考核</h2>
-            <p></p>
+        </div>
+
+        <div class="row">
+            <h2>考核列表</h2>
+
+            <% exams.forEach(function(exam){ %>
+                <p><a href="/backend/addSubject?examTitle=<%= exam.title %>"><%= exam.title %></a> <a class="btn btn-success" href="/backend/activeExam?examTitle="<%= exam.title %>>设为目前考核</a></p>
+            <% });%>
         </div>
 
         <br/>
