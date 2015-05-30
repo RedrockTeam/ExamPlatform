@@ -9,8 +9,7 @@ var middlewareManager = require('./middleware');
 var passport = require('passport');
 var GitHubStrategy = require('passport-github').Strategy;
 var session = require('express-session');
-var Store = session.Store;
-var MongooseStore = require('mongoose-express-session')(Store);
+var MongoStore = require('connect-mongo')(session);
 var mongoose = require('./models').monogoose;
 var app = express();
 
@@ -26,13 +25,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret : "hGS5CX3V",
-    resave : false,
-    rolling : false,
     cookie: { maxAge: 1000 * 60 * 60 * 5} ,
-    saveUninitialized : true,
-    store: new MongooseStore({
-        /* configuration */
-        connection : mongoose
+    store: new MongoStore({
+        mongooseConnection: mongoose.connection
     })
 }));
 
