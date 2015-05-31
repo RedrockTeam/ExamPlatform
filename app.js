@@ -25,7 +25,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret : "hGS5CX3V",
+    resave : false,
+    rolling : false,
     cookie: { maxAge: 1000 * 60 * 60 * 5} ,
+    saveUninitialized : true,
     store: new MongoStore({
         mongooseConnection: mongoose.connection
     })
